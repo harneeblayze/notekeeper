@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "572975796719",
+    "firebase_url": "https://notekeepa.firebaseio.com",
+    "project_id": "notekeepa",
+    "storage_bucket": "notekeepa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:572975796719:android:36da16b68343c390",
+        "android_client_info": {
+          "package_name": "com.example.notekeeper"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDUyHVSWPvvfey2IpxqnD31H3IJD_Qg-c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "572975796719-hnvd7hlhd6p2ir97ce7vrc33abk5or1a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

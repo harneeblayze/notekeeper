@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>572975796719-79ikq7q3s9iocplpto9161qdjcmvis86.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.572975796719-79ikq7q3s9iocplpto9161qdjcmvis86</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDboPlLQ8oWZCRx3DyXQ6ZLX2aaqbfenVk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>572975796719</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.notekeeper</string>
+	<key>PROJECT_ID</key>
+	<string>notekeepa</string>
+	<key>STORAGE_BUCKET</key>
+	<string>notekeepa.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:572975796719:ios:36da16b68343c390</string>
+	<key>DATABASE_URL</key>
+	<string>https://notekeepa.firebaseio.com</string>
+</dict>
+</plist>

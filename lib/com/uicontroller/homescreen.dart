@@ -13,11 +13,11 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController _titleEditingController = new TextEditingController();
   TextEditingController _bodyEditingController = new TextEditingController();
   ScrollController _scrollController = new ScrollController();
-  FocusNode _titleFocusNode = new FocusNode();
-  FocusNode _bodyFocusNode = new FocusNode();
   GlobalKey _titleKey = new GlobalKey();
+  GlobalKey formKey = new GlobalKey<FormState>();
   GlobalKey _bodyKey = new GlobalKey();
   Map<String, dynamic> noteData;
+  bool autoval = false;
 
   @override
   void initState() {
@@ -77,6 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
         elevation: 4.0,
         splashColor: Colors.blueGrey,
         onPressed: () {
+          setState(() {
+            autoval = true;
+          });
           print('>>>>>>>>>>>>>>>>>>>>>>' + _titleEditingController.text);
           //Navigator.pop(context);
           //Navigator.of(context).pop();
@@ -84,16 +87,26 @@ class _MyHomePageState extends State<MyHomePage> {
             'title': _titleEditingController.text,
             'body': _bodyEditingController.text
           };
+
+          final form = formKey.currentState;
+          //data['productRef']
+
           addNote(noteData).then((result) {
-            setState(() {
-              _showPersBottomSheetCallBack = null;
-            });
-            _titleEditingController.clear();
-            _bodyEditingController.clear();
-            SnackBar(
-              content: Text('Note has been added to Stack'),
-              duration: Duration(seconds: 2),
-            );
+            if (noteData['title'] != null &&
+                noteData['title'] != "" &&
+                noteData['body'] != null) {
+              _titleEditingController.clear();
+              _bodyEditingController.clear();
+
+              setState(() {
+                autoval = true;
+              });
+            } else {
+              setState(() {
+                autoval = false;
+              });
+              return;
+            }
           });
           // Perform some action
         },
@@ -110,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildInputField(
       TextEditingController controller,
-      FocusNode focusNode,
+      //FocusNode _focusNode,
       Key key,
       String hintText,
       String errorText,
@@ -125,10 +138,10 @@ class _MyHomePageState extends State<MyHomePage> {
               errorColor: const Color(0xFFFFB822),
               hintColor: Colors.grey.shade400),
           child: Container(
+            //constraints: BoxConstraints.expand(),
             key: key,
             child: new TextFormField(
               controller: controller,
-              focusNode: focusNode,
               maxLines: maxLines,
               keyboardType: TextInputType.text,
               decoration: new InputDecoration(
@@ -143,14 +156,17 @@ class _MyHomePageState extends State<MyHomePage> {
                     const EdgeInsets.only(top: 13.0, bottom: 13.0, left: 8.0),
               ),
               style: TextStyle(color: Colors.white),
-              autovalidate: false,
+              autovalidate: autoval,
               validator: (val) {
                 if (val.isEmpty) {
                   moveToSpecifiedPosition(key);
 
                   return errorText;
+                } else {
+                  return null;
                 }
               },
+              autofocus: true,
             ),
           )),
     );
@@ -172,45 +188,41 @@ class _MyHomePageState extends State<MyHomePage> {
                 borderRadius: new BorderRadius.only(
                     topLeft: new Radius.circular(11.0),
                     topRight: new Radius.circular(11.0))),
-            child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Center(child: _pullDownTray(screenSize)),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 34.0),
-                    child: _textItem(context, 12, Colors.white, "Title", 18,
-                        FontWeight.normal),
-                  ),
-                  _buildInputField(
-                      _titleEditingController,
-                      _titleFocusNode,
-                      _titleKey,
-                      'Enter a Title',
-                      'Title cannot be Blank',
-                      1,
-                      12.0),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 34.0),
-                    child: _textItem(context, 12, Colors.white, "Note Content",
-                        18, FontWeight.normal),
-                  ),
-                  Flexible(
-                    child: _buildInputField(
-                        _bodyEditingController,
-                        _bodyFocusNode,
-                        _bodyKey,
-                        'Type the Note content..',
-                        'please write a note',
-                        12,
-                        12.0),
-                  ),
+            child: Form(
+              key: formKey,
+              child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Center(child: _pullDownTray(screenSize)),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 34.0),
+                      child: _textItem(context, 12, Colors.white, "Title", 18,
+                          FontWeight.normal),
+                    ),
+                    _buildInputField(_titleEditingController, _titleKey,
+                        'Enter a Title', 'Title cannot be Blank', 1, 12.0),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 34.0),
+                      child: _textItem(context, 12, Colors.white,
+                          "Note Content", 18, FontWeight.normal),
+                    ),
+                    Flexible(
+                      child: _buildInputField(
+                          _bodyEditingController,
+                          _bodyKey,
+                          'Type the Note content..',
+                          'please write a note',
+                          12,
+                          12.0),
+                    ),
 
-                  //_formField(
-                  //  10.0, 15.0, 1.0, 'Type a Note', 14.0, _bodyEditingController),
-                  //Flexible(child: _showBarcodeImage('images/qr_scan.png')),
-                  Flexible(child: Center(child: _showButton()))
-                ]),
+                    //_formField(
+                    //  10.0, 15.0, 1.0, 'Type a Note', 14.0, _bodyEditingController),
+                    //Flexible(child: _showBarcodeImage('images/qr_scan.png')),
+                    Flexible(child: Center(child: _showButton()))
+                  ]),
+            ),
           );
         })
         .closed
@@ -277,8 +289,10 @@ class _MyHomePageState extends State<MyHomePage> {
               if (!snapshot.hasData) return const Text("...Loading");
               return ListView.builder(
                   itemCount: snapshot.data.documents.length,
-                  itemBuilder: (context, index) =>
-                      _buildItem(context, snapshot.data.documents[index])
+                  itemBuilder: (context, index) => _buildItem(
+                      context,
+                      snapshot.data.documents[
+                          snapshot.data.documents.length - (index + 1)])
                   /*NoteItem(snapshot.data.documents[index])*/);
             }),
         floatingActionButton: removeaAddButton
